@@ -1,2 +1,2 @@
 # LeagueMatchups
-its analyzes matchups for League ofOf Legends
+its analyzes matchups for League of Legends
