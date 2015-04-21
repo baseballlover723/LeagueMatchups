@@ -6,6 +6,7 @@
 </head>
 <body>
 <?php
+  include 'header.php';
   echo "This is the results page";
 ?>
 </body>
