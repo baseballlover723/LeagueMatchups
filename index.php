@@ -1,34 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Leaguematchups by baseballlover723</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-
+    <?php
+        include 'imports.php';
+    ?>
     <link rel="stylesheet" href="stylesheets/index.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 <body>
-<div id="header">
-    <nav>
-        <li class="fork"><a href="https://github.com/baseballlover723/LeagueMatchups">View On GitHub</a></li>
-        <li class="downloads"><a href="https://github.com/baseballlover723/LeagueMatchups/zipball/master">ZIP</a></li>
-        <li class="downloads"><a href="https://github.com/baseballlover723/LeagueMatchups/tarball/master">TAR</a></li>
-        <li class="title">DOWNLOADS</li>
-    </nav>
-</div>
-<!-- end header -->
-
+<?php
+    include 'header.php';
+?>
 <div class="wrapper">
     <section>
         <div id="title">
@@ -54,8 +35,6 @@
                 </select>
             </p>
         </div>
-
-
         <!--[if !IE]>
         <script>fixScale(document);</script><![endif]-->
 </body>
