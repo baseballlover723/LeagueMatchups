@@ -1,6 +1,6 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
+<head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Leaguematchups by baseballlover723</title>
@@ -17,7 +17,6 @@
 
     <link rel="stylesheet" href="stylesheets/index.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
 </head>
 <body>
 <div id="header">
@@ -31,10 +30,10 @@
 <!-- end header -->
 
 <div class="wrapper">
-
     <section>
         <div id="title">
             <h1>Leaguematchups</h1>
+
             <p>It analyzes matchups for League of Legends</p>
             <hr>
             <span class="credits left">Project maintained by <a href="https://github.com/baseballlover723">baseballlover723</a></span>
@@ -43,6 +42,7 @@
         </div>
 
         <h3>Welcome to GitHub Pages.</h3>
+
         <div id="lane-selector-box">
             <p>Select your lane:
                 <select id="lane-selector">
@@ -56,10 +56,7 @@
         </div>
 
 
-
-
         <!--[if !IE]>
         <script>fixScale(document);</script><![endif]-->
-
 </body>
 </html>
