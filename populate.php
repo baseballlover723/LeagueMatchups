@@ -12,7 +12,7 @@ include 'header.php';
 <div class="wrapper">
   <section>
     <?php
-    echo 'this is my php results page';
+    echo 'this is my php page to populate the database';
     ?>
   </section>
 </div>

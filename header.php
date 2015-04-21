@@ -1,6 +1,7 @@
 <?php
 echo '<div id="header">
     <nav>
+        <li class="fork"><a href="index.php">Go Back to Index</a></li>
         <li class="fork"><a href="https://github.com/baseballlover723/LeagueMatchups">View On GitHub</a></li>
         <li class="downloads"><a href="https://github.com/baseballlover723/LeagueMatchups/zipball/master">ZIP</a></li>
         <li class="downloads"><a href="https://github.com/baseballlover723/LeagueMatchups/tarball/master">TAR</a></li>

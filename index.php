@@ -2,13 +2,13 @@
 <html>
 <head lang="en">
     <?php
-        include 'imports.php';
+    include 'imports.php';
     ?>
     <link rel="stylesheet" href="stylesheets/index.css">
 </head>
 <body>
 <?php
-    include 'header.php';
+include 'header.php';
 ?>
 <div class="wrapper">
     <section>
@@ -35,9 +35,11 @@
                 </select>
             </p>
         </div>
-        <a href='#' class='button'>Get Results</a>
-
+        <a href='result.php' class='button'>Get Results</a>
+        <a href='populate.php' class='button'>Populate Database</a>
         <!--[if !IE]>
         <script>fixScale(document);</script><![endif]-->
+    </section>
+</div>
 </body>
 </html>
