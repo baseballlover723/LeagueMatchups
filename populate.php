@@ -33,7 +33,7 @@
 		global $con;
 //		echo callAPI("static-data/na/v1.2/champion", ["champData=tags"]);
 		$arr = json_decode(callAPI("static-data/na/v1.2/champion", ["champData=tags"]), true)["data"];
-		foreach($arr as $data) {
+		foreach ($arr as $data) {
 			@populateChampion($con, $data);
 			echo print_r($data) . "<br/><br/>";
 		}
@@ -62,56 +62,57 @@
 	}
 
 	//
-		function callAPI($path, $params) {
-			global $apiKey;
-			global $baseUrl;
-			$url = $baseUrl . $path . "?";
-			if (count($params) > 0) {
-				for ($k = 0; $k < count($params); $k++) {
-					$url = $url . $params[$k] . "&";
-				}
+	function callAPI($path, $params) {
+		global $apiKey;
+		global $baseUrl;
+		$url = $baseUrl . $path . "?";
+		if (count($params) > 0) {
+			for ($k = 0; $k < count($params); $k++) {
+				$url = $url . $params[$k] . "&";
 			}
-			$url = $url . $apiKey;
+		}
+		$url = $url . $apiKey;
 
-	//		echo "url = $url<br/>";
-			$response = @file_get_contents($url);
-			list($version,$status_code,$msg) = explode(' ',$http_response_header[0], 3);
-			echo "status code = $status_code<br/>";
-			if ($status_code === "200") {
-				return $response;
-			}
-			return false;
+		//		echo "url = $url<br/>";
+		$response = @file_get_contents($url);
+		list($version, $status_code, $msg) = explode(' ', $http_response_header[0], 3);
+		echo "status code = $status_code<br/>";
+		if ($status_code === "200") {
+			return $response;
 		}
 
-//	function callAPI($path, $params) {
-//		global $apiKey;
-//		global $baseUrl;
-//		$url = $baseUrl . $path . "?";
-//		if (count($params) > 0) {
-//			for ($k = 0; $k < count($params); $k++) {
-//				$url = $url . $params[$k] . "&";
-//			}
-//		}
-//		$url = $url . $apiKey;
-//				echo "url = $url<br/>";
-//
-//		$curl = curl_init($url);
-//		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-//		$curl_response = curl_exec($curl);
-//		echo "***$curl_response***";
-//		if ($curl_response === false) {
-//			$info = curl_getinfo($curl);
-//			curl_close($curl);
-//			die('error occured during curl exec. Additional info: ' . var_export($info));
-//		}
-//		curl_close($curl);
-////		echo "$curl_response<br/>*<br/>";
-//		$decoded = json_decode($curl_response);
-//		if (isset($decoded->response->status) && $decoded->response->status == 'ERROR') {
-//			die('error occured: ' . $decoded->response->errormessage);
-//		}
-//		echo 'response ok!';
-//		var_export($decoded->response);
-//	}
+		return false;
+	}
+
+	//	function callAPI($path, $params) {
+	//		global $apiKey;
+	//		global $baseUrl;
+	//		$url = $baseUrl . $path . "?";
+	//		if (count($params) > 0) {
+	//			for ($k = 0; $k < count($params); $k++) {
+	//				$url = $url . $params[$k] . "&";
+	//			}
+	//		}
+	//		$url = $url . $apiKey;
+	//				echo "url = $url<br/>";
+	//
+	//		$curl = curl_init($url);
+	//		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+	//		$curl_response = curl_exec($curl);
+	//		echo "***$curl_response***";
+	//		if ($curl_response === false) {
+	//			$info = curl_getinfo($curl);
+	//			curl_close($curl);
+	//			die('error occured during curl exec. Additional info: ' . var_export($info));
+	//		}
+	//		curl_close($curl);
+	////		echo "$curl_response<br/>*<br/>";
+	//		$decoded = json_decode($curl_response);
+	//		if (isset($decoded->response->status) && $decoded->response->status == 'ERROR') {
+	//			die('error occured: ' . $decoded->response->errormessage);
+	//		}
+	//		echo 'response ok!';
+	//		var_export($decoded->response);
+	//	}
 
 ?>
