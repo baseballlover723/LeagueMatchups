@@ -93,7 +93,7 @@
 		}
 		$url = $url . $apiKey;
 
-		//		echo "url = $url<br/>";
+				echo "url = $url<br/>";
 		$response = @file_get_contents($url);
 		list($version, $status_code, $msg) = explode(' ', $http_response_header[0], 3);
 		echo "status code = $status_code<br/>";

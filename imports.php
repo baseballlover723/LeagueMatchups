@@ -5,7 +5,7 @@
  * Date: 4/21/2015
  * Time: 12:39 PM
  */
-echo '<meta charset="utf-8">
+    echo '<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Leaguematchups by baseballlover723</title>
     <link rel="stylesheet" href="stylesheets/styles.css">
