@@ -1,10 +1,12 @@
 "use strict";
 // put bot lane match ups in its own table not the matchups table
 // mySummonerId = 60872099
-var KEYS = ["f5c821d7-fc96-47f3-914d-7026a8525eee"];//, "ba98468a-1964-4698-8079-27d719b3a885"];
-//var KEYS = ["f5c821d7-fc96-47f3-914d-7026a8525eee", "ba98468a-1964-4698-8079-27d719b3a885",
-// "9b1bf08c-b751-48c9-be38-c89b83fbf433", "31be7c11-4657-4cad-a3b4-18bc3d497fcf",
-// "d23853af-c9b7-4039-8ff2-472fd56f9663", "50509487-7c60-4590-8a3c-d27fe7abde87"];
+//var KEYS = ["f5c821d7-fc96-47f3-914d-7026a8525eee"];//, "ba98468a-1964-4698-8079-27d719b3a885"];
+var KEYS = ["f5c821d7-fc96-47f3-914d-7026a8525eee", "ba98468a-1964-4698-8079-27d719b3a885",
+            "9b1bf08c-b751-48c9-be38-c89b83fbf433", "31be7c11-4657-4cad-a3b4-18bc3d497fcf",
+            "d23853af-c9b7-4039-8ff2-472fd56f9663", "50509487-7c60-4590-8a3c-d27fe7abde87",
+            "67f8945b-05c7-49b0-ac69-e4d6b30bb529"
+];
 var keyIndex = 0;
 
 var CHAMP_REQUEST = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image,tags&api_key=";
@@ -214,7 +216,7 @@ function addMatchups() {
     button.text("STOP!");
 
     //var matchID = 1822224218; // featured
-    var matchID = 1822224165;
+    var matchID = 1822224130;
     hits = 0;
 
     misses = 0;
@@ -258,6 +260,7 @@ function addMatchups() {
                     success: function (ajax, textStatus, XMLHTTPRequest) {
                         //console.log(url);
                         updateHit(ajax, this.key);
+                        console.log("done");
                         //console.log("got data *");
                         //console.log(ajax);
 
@@ -265,7 +268,7 @@ function addMatchups() {
                 });
                 matchID--;
             }
-            clearInterval(interval);
+            //clearInterval(interval);
             //setTimeout(function () {
             //    clearInterval(connectionInterval);
             //}, 1000);
@@ -340,8 +343,8 @@ function updateHit(game, key) {
 function validGame(game) {
     var queueType = game["queueType"];
     if (queueType == "RANKED_SOLO_5x5" || queueType == "NORMAL_5x5_BLIND" || queueType == "NORMAL_5x5_DRAFT" || queueType == "RANKED_TEAM_5x5") {
-        return checkValidMeta(game);
-        //return true;
+        //return checkValidMeta(game);
+        return true;
     }
     return false;
 }
@@ -391,6 +394,9 @@ function parseMatch(match, key) {
         player.stats20 = [];
 
         player.stats20.items = [];
+        if (player.championId == 112) {
+            player.stats20.items.push(3200);
+        }
 
         player.stats20.laneKills = 0;
         player.stats20.kills = 0;
@@ -417,10 +423,10 @@ function parseMatch(match, key) {
         var frames = timeline[k];
         for (var event in frames.events) {
             event = frames.events[event];
-            if (event.participantId == 8) {
-                //console.log("full log");
-                //console.log(event);
-            }
+            //if (event.participantId == 8) {
+            //console.log("full log");
+            //console.log(event);
+            //}
             if (event.eventType == "CHAMPION_KILL") {
                 handleKill(event, players);
             } else if (event.eventType == "BUILDING_KILL") {
@@ -428,7 +434,10 @@ function parseMatch(match, key) {
             } else if (event.eventType == "ITEM_DESTROYED" || event.eventType == "ITEM_SOLD") {
                 handleSellItem(event, players);
             } else if (event.eventType == "ITEM_UNDO") {
-                handleUndoItem(event, players, frames);//, k == 0 ? [] : timeline[k - 1])
+                //console.log("before");
+                //console.log(timeline[k-1]);
+                handleUndoItem(event, players, frames, k == 0 ? false : timeline[k - 1]);
+                //console.log("after");
             } else if (event.eventType == "ITEM_PURCHASED") {
                 handleBuyItem(event, players);
             }
@@ -470,78 +479,6 @@ function handleKill(kill, players) {
             assister.stats20.assists++;
         }
     }
-}
-function testInLane() {
-    console.log("test in lane");
-    var players = [
-        {lane: "TOP"}, {lane: "JUNGLE"}, {lane: "MIDDLE"}, {lane: "BOTTOM"}, {lane: "BOTTOM"},
-        {lane: "TOP"}, {lane: "JUNGLE"}, {lane: "MIDDLE"}, {lane: "BOTTOM"}, {lane: "BOTTOM"}
-    ];
-    console.log("");
-    console.log("************** TRUE TOP LANE");
-
-    console.log("T top -> top => " + inLane("TOP", players, 0, undefined));
-    console.log("T jungle -> top => " + inLane("TOP", players, 1, undefined));
-    console.log("T top -> jungle => " + inLane("JUNGLE", players, 0, undefined));
-
-    console.log("");
-    console.log("************** FALSE TOP LANE");
-
-    console.log("F execute -> top => " + inLane("TOP", players, -1, undefined));
-    console.log("F Bot -> top => " + inLane("TOP", players, 3, undefined));
-    console.log("F Mid -> top => " + inLane("TOP", players, 2, undefined));
-    console.log("F Top -> mid => " + inLane("MIDDLE", players, 0, undefined));
-    console.log("F Top -> bot => " + inLane("BOTTOM", players, 0, undefined));
-
-    console.log("");
-    console.log("************** TRUE BOT LANE");
-
-    console.log("T bot -> bot => " + inLane("BOTTOM", players, 3, undefined));
-    console.log("T bot,bot -> bot => " + inLane("BOTTOM", players, 3, [4]));
-    console.log("T bot,jungle -> bot => " + inLane("BOTTOM", players, 3, [1]));
-    console.log("T bot,jungle -> jungle => " + inLane("JUNGLE", players, 3, [1]));
-    console.log("T bot, bot,jungle -> bot => " + inLane("BOTTOM", players, 3, [4, 1]));
-
-    console.log("");
-    console.log("************** FALSE BOT LANE");
-
-    console.log("F bot, bot,jungle mid -> bot => " + inLane("BOTTOM", players, 3, [4, 1, 2]));
-    console.log("F bot, bot,jungle top -> bot => " + inLane("BOTTOM", players, 3, [4, 1, 0]));
-    console.log("F bot, bot,jungle top, mid -> bot => " + inLane("BOTTOM", players, 3, [4, 1, 0, 2]));
-
-    console.log("");
-    console.log("************** TRUE MID LANE");
-
-    console.log("T mid -> mid => " + inLane("MIDDLE", players, 2, undefined));
-    console.log("T mid -> jungle => " + inLane("JUNGLE", players, 2, undefined));
-    console.log("T mid, jungle -> mid => " + inLane("MIDDLE", players, 2, [1]));
-    console.log("T mid -> jungle => " + inLane("JUNGLE", players, 2, [1]));
-
-    console.log("");
-    console.log("************** FALSE MID LANE");
-
-    console.log("F mid -> top => " + inLane("TOP", players, 2, undefined));
-    console.log("F mid -> bot => " + inLane("BOTTOM", players, 2, undefined));
-    console.log("F mid, jungle -> top => " + inLane("TOP", players, 2, [1]));
-    console.log("F mid, top, jungle -> top => " + inLane("TOP", players, 2, [0, 1]));
-    console.log("F mid, bot -> jungle => " + inLane("JUNGLE", players, 2, [3]));
-
-    console.log("");
-    console.log("************** TRUE JUNGLE");
-
-    console.log("T jungle -> jungle => " + inLane("JUNGLE", players, 1, undefined));
-    console.log("T jungle -> bot => " + inLane("BOTTOM", players, 1, undefined));
-    console.log("T jungle -> mid => " + inLane("MID", players, 1, undefined));
-    console.log("T jungle -> top => " + inLane("TOP", players, 1, undefined));
-    console.log("T jungle, top -> top => " + inLane("TOP", players, 1, [0]));
-    console.log("T jungle, bot, bot -> bot => " + inLane("BOTTOM", players, 1, [3, 4]));
-
-    console.log("");
-    console.log("************** FALSE JUNGLE");
-
-    console.log("F jungle mid, -> top => " + inLane("TOP", players, 1, [2]));
-    console.log("F jungle, top -> mid => " + inLane("MIDDLE", players, 1, [0]));
-    console.log("F jungle, bot, bot -> top => " + inLane("TOP", players, 1, [3, 4]));
 }
 
 function inLane(lane, players, killerId, assistersIds) {
@@ -592,8 +529,6 @@ function handleTower(towerKill, players) {
 }
 
 function handleSellItem(item, players) {
-    //console.log("sold item " + item.itemId);
-    //console.log(item);
     if (notConsumableItem(item.itemId)) {
         var playerId = parseInt(item.participantId) - 1;
         //console.log(playerId);
@@ -608,18 +543,39 @@ function handleSellItem(item, players) {
                 console.log(item);
                 console.log(player.stats20.items);
                 console.log(index);
+                hits--;
+                requests--;
+                updateMiss({status: 500, statusText: "Internal Server Error, tried to sell an item you didn't have"}, null);
+                return;
             }
             player.stats20.items.splice(index, 1);
-            if (parseInt(item.participantId) - 1 == 7) {
-                console.log("\nsold item " + item.itemId);
-                console.log(item);
-                console.log(players[parseInt(item.participantId) - 1].stats20.items);
-            }
+            //if (parseInt(item.participantId) - 1 == 2) {
+            //    console.log("\nsold item " + item.itemId);
+            //    console.log(item);
+            //    console.log(players[parseInt(item.participantId) - 1].stats20.items);
+            //}
         }
     }
 }
 
-function handleUndoItem(item, players, frames){//, previousFrames) {
+function handleBuyItem(item, players) {
+    if (notConsumableItem(item.itemId)) {
+        players[parseInt(item.participantId) - 1].stats20.items.push(item.itemId);
+        //if (parseInt(item.participantId) - 1 == 2) {
+        //    console.log("\nbought item " + item.itemId);
+        //    console.log(item);
+        //    console.log(players[parseInt(item.participantId) - 1].stats20.items);
+        //}
+    }
+}
+
+function handleUndoItem(item, players, frames, previousFrames) {
+    if (!previousFrames) {
+        previousFrames = {events: []};
+    }
+    if (!previousFrames.events) {
+        previousFrames.events = [];
+    }
     var player = players[parseInt(item.participantId) - 1];
     if (item.itemBefore == 0) {
         // undo sell
@@ -629,71 +585,60 @@ function handleUndoItem(item, players, frames){//, previousFrames) {
     } else {
         // undo buy
         if (notConsumableItem(item.itemBefore)) {
-            var undoed;
-            //frames.events = previousFrames.events.concat(frames.events);
-            console.log(frames.events);
-            if (parseInt(item.participantId) - 1 == 9) {
-                console.log("\nUNDO item " + item.itemBefore);
-                console.log(item);
-                console.log(players[parseInt(item.participantId) - 1].stats20.items);
-            }
-            // look through the frame for the item that needs to be un-doed
-            for (var index = frames.events.length - 1; index > -1; index--) {
-                //for (var event in frames.events) {
-                //    event = frames.events[event];
-                var event = frames.events[index];
-                //console.log(event);
-                if (event.itemId == item.itemBefore && event.participantId == item.participantId && event.timestamp <= item.timestamp) {
-                    // found the item to be undoed
-                    //console.log("found undoed");
-                    undoed = event;
-                    break;
-                }
-            }
-            //console.log("undoed = ");
-            //console.log(undoed);
-            // go through the frame again to revert the changes
-            for (var index = frames.events.length - 1; index > -1; index--) {
-                var event = frames.events[index];
-                if (event.timestamp <= item.timestamp && parseInt(event.participantId) - 1 == 7 && parseInt(item.participantId) - 1 == 7) {
-                    //console.log("possible revert event ");
-                    //console.log(event);
-                }
-                if (event.timestamp < undoed.timestamp) {
-                    //console.log("don't need to look further");
-                    break;
-                }
-
-                if (event.timestamp == undoed.timestamp && event.participantId == item.participantId) {
-                    if (event.eventType == "ITEM_PURCHASED") {
-                        handleSellItem(event, players)
-                    } else if (event.eventType == "ITEM_DESTROYED" || event.eventType == "ITEM_SOLD"){
-                        handleBuyItem(event, players);
+            var events = previousFrames.events.concat(frames.events);
+            //if (parseInt(item.participantId) - 1 == 2) {
+            //    console.log("\nUNDO item " + item.itemBefore);
+            //    console.log(item);
+            //    console.log(players[parseInt(item.participantId) - 1].stats20.items);
+            //}
+            var innerUndoitemId = false;
+            var index = events.indexOf(item) - 1;
+            while (index > -1) {
+                var event = events[index];
+                if (event.eventType == "ITEM_UNDO" && event.participantId == item.participantId && !innerUndoitemId) {
+                    // found a inner undo while not in another inner undo
+                    if (event.itemBefore != 0) {
+                        innerUndoitemId = event.itemBefore;
                     } else {
-                        console.log("other event during undo");
-                        console.log(event);
+                        innerUndoitemId = event.itemAfter;
                     }
+                    //console.log("dont revert stuff until I find item " + innerUndoitemId);
                 }
-            }
-            if (parseInt(item.participantId) - 1 == 7) {
-                console.log("END UNDO");
-            }
+                //if (parseInt(item.participantId) - 1 == 2) {
+                //    if (event.participantId == item.participantId && !innerUndoitemId) {
+                //        console.log("revert ");
+                //    }
+                //    console.log(event);
+                //}
+                if (event.participantId == item.participantId && !innerUndoitemId) {
+                    revertEvent(event, players);
+                }
+                if (innerUndoitemId && event.participantId == item.participantId && event.itemId == innerUndoitemId) {
+                    innerUndoitemId = false;
+                    //console.log("out of inner loop now");
+                }
 
-            //var index = player.stats20.items.indexOf(item.itemBefore);
-            //player.stats20.items.splice(index, 1);
+                if (event.participantId == item.participantId && event.itemId == item.itemBefore) {
+                    //console.log("found the end of the undo");
+                    // assuming the reveted op is at the beggining of the time frame
+                    break;
+                }
+                index--;
+            }
+            //if (parseInt(item.participantId) - 1 == 2) {
+            //    console.log("END UNDO");
+            //}
         }
     }
-
 }
 
-function handleBuyItem(item, players) {
-    if (notConsumableItem(item.itemId)) {
-        players[parseInt(item.participantId) - 1].stats20.items.push(item.itemId);
-        if (parseInt(item.participantId) - 1 == 7) {
-            console.log("\nbought item " + item.itemId);
-            console.log(item);
-            console.log(players[parseInt(item.participantId) - 1].stats20.items);
-        }
+function revertEvent(event, players) {
+    if (event.eventType == "ITEM_PURCHASED") {
+        handleSellItem(event, players);
+    } else if (event.eventType == "ITEM_DESTROYED" || event.eventType == "ITEM_SOLD") {
+        handleBuyItem(event, players);
+    } else {
+        //console.log("not buy or sell");
     }
 }
 

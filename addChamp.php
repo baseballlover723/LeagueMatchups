@@ -1,5 +1,5 @@
 <?php
-	$champFileUrl = "championQueries.sql";
+	$champFileUrl = "SQL/championQueries.sql";
 	# A PHP script to return book data.  Author: Marty Stepp, Nov 30 2008
 
 	# main program
@@ -25,7 +25,7 @@
 		$imageURL = htmlspecialchars($_POST["imageURL"], ENT_QUOTES);
 		//	echo "name = $name, id = $id, title = $title, primary role = $primaryRole, secondary role = $secondaryRole, imageURL = $imageURL <br/>";
 		// id name title role1 role2
-		$query = "CALL insert_champion($id, '$name', '$title', '$primaryRole', '$secondaryRole', '$imageURL');";
+		$query = "CALL insertChampion('$id', '$name', '$title', '$imageURL', '$primaryRole', '$secondaryRole');";
 //		echo $query;
 		fwrite($champFile, "$query\n");
 		fclose($champFile);

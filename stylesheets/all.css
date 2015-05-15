@@ -55,3 +55,36 @@ body {
     background-image: -ms-linear-gradient(top, #3e779d 0%, #65a9d7 100%);
     color: #fff;
 }
+
+.row {
+    text-align: center;
+    padding-bottom: 15px;
+}
+.row p{
+    display: inline;
+}
+
+.left {
+    width: 33.3%;
+    float:left;
+    outline: green solid 2pt;
+}
+.center {
+    width: 33.3%;
+    outline: green solid 2pt;
+    margin:auto;
+}
+.right {
+    width: 33.3%;
+    float:right;
+    text-align: center;
+    outline: green solid 2pt;
+}
+
+.error {
+    color: red;
+}
+
+#errors {
+    font-size: 20pt;
+}
